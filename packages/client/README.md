@@ -1,0 +1,1 @@
+# Simple (dumb) React demo shell with Honeycomb's Web SDK installed
