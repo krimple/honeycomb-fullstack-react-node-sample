@@ -16,7 +16,7 @@ const sdk = new opentelemetry.NodeSDK({
             'x-honeycomb-team': process.env.HONEYCOMB_API_KEY
         }
     }),
-    serviceName: 'express-server',
+    serviceName: 'express-backend',
     instrumentations: [getNodeAutoInstrumentations()],
 });
 
