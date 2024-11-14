@@ -60,6 +60,7 @@ function App() {
                 <button className="border border-black rounded-2xl p-1" name="clickWithInlines" onClick={clickWithInlines}>Do it
                     all in one event
                 </button>
+                Mode is: { import.meta.env.MODE }
             </div>
         </div>
     );

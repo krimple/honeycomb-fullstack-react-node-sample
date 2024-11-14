@@ -9,6 +9,12 @@ const configDefaults = {
     ]
 }
 export default function Observability(){
+    // get out early and do NOTHING if we're running in development
+    if (import.meta.env.MODE === 'development') {
+        console.log(`Skipping o11y in dev mode`);
+        return null;
+    }
+
     try {
         // doesn't specify SDK endpoint, defaults to us v1/traces endpoint
         const sdk = new HoneycombWebSDK({
