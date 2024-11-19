@@ -26,19 +26,19 @@ services:
   #   entrypoint:
   #     [otelcol-contrib validate --config /etc/ottelcol-contrib/config.yaml]
 
-  # otel-collector:
-  #   # depends_on:
-  #   #   - otel-validator
-  #   image: otel/opentelemetry-collector-contrib
-  #   volumes:
-  #     - ./packages/otel-collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
-  #   environment:
-  #     HONEYCOMB_API_KEY: $HONEYCOMB_API_KEY
-  #   ports:
-  #     - "1888:1888" # pprof extension
-  #     - "8888:8888" # Prometheus metrics exposed by the Collector
-  #     - "8889:8889" # Prometheus exporter metrics
-  #     - "13133:13133" # health_check extension
-  #     - "4317:4317" # OTLP gRPC receiver
-  #     - "4318:4318" # OTLP http receiver
-  #     - "55679:55679" # zpages extension
+  otel-collector:
+    # depends_on:
+    #   - otel-validator
+    image: otel/opentelemetry-collector-contrib
+    volumes:
+      - ./packages/otel-collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    environment:
+      HONEYCOMB_API_KEY: $HONEYCOMB_API_KEY
+    ports:
+      - "1888:1888" # pprof extension
+      - "8888:8888" # Prometheus metrics exposed by the Collector
+      - "8889:8889" # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP http receiver
+      - "55679:55679" # zpages extension

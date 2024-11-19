@@ -2,6 +2,7 @@ receivers:
   otlp:
     protocols:
       http:
+        endpoint: 0.0.0.0:4318
         cors:
           allowed_origins:
             - "*"
@@ -17,12 +18,12 @@ processors:
     detectors: [system]
 
 exporters:
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: https://api-dogfood.honeycomb.io:443
     headers:
       "x-honeycomb-team": "$HONEYCOMB_API_KEY"
-  debug:
-    verbosity: detailed
 
 service:
   pipelines:
@@ -30,8 +31,3 @@ service:
       receivers: [otlp]
       processors: [batch, memory_limiter, resourcedetection]
       exporters: [otlp]
-#  telemetry:
-#    logs:
-#      level: "DEBUG"
-#      development: true
-#      encoding: "json"
