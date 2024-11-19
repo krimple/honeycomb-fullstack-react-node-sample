@@ -2,23 +2,36 @@ receivers:
   otlp:
     protocols:
       http:
-        endpoint: localhost:4318
         cors:
           allowed_origins:
+            - "*"
+          allowed_headers:
             - "*"
 
 processors:
   batch:
+  memory_limiter:
+    check_interval: 5s
+    limit_mib: 600
+  resourcedetection:
+    detectors: [system]
 
 exporters:
   otlp:
-    endpoint: "api-dogfood.honeycomb.io:443"
+    endpoint: https://api-dogfood.honeycomb.io:443
     headers:
       "x-honeycomb-team": "$HONEYCOMB_API_KEY"
+  debug:
+    verbosity: detailed
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [batch, memory_limiter, resourcedetection]
       exporters: [otlp]
+#  telemetry:
+#    logs:
+#      level: "DEBUG"
+#      development: true
+#      encoding: "json"
