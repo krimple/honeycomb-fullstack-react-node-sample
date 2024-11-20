@@ -5,17 +5,24 @@ receivers:
         endpoint: 0.0.0.0:4318
         cors:
           allowed_origins:
-            - "*"
-          allowed_headers:
-            - "*"
+            - http://localhost:8080
+            - http://express-server:8080
+            # - "*"
+          # allowed_headers:
+          #   - "*"
+            # - "Access-Control-Request-Headers"
+            # - "Access-Control-Request-Method"
+            # - "content-type"
+            # - "Origin"
+            # - "X-Honeycomb-Team"
 
 processors:
   batch:
-  memory_limiter:
-    check_interval: 5s
-    limit_mib: 600
-  resourcedetection:
-    detectors: [system]
+  # memory_limiter:
+  #   check_interval: 5s
+  #   limit_mib: 600
+  # resourcedetection:
+  #   detectors: [system]
 
 exporters:
   debug:
@@ -29,5 +36,6 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch, memory_limiter, resourcedetection]
-      exporters: [otlp]
+      # processors: [batch, memory_limiter, resourcedetection]
+      processors: [batch]
+      exporters: [debug,otlp]

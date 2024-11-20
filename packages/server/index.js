@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const generateNonsenseSentence = require('./werds');
-require('./tracing.js');
 const logger = require('./logger');
 
 logger.info('Hello, world!');
