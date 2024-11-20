@@ -22,4 +22,6 @@ RUN pnpm install
 
 EXPOSE 3000
 
+ENV OTEL_LOG_LEVEL INFO
+
 CMD ["node", "-r", "./tracing.js", "./index.js"]

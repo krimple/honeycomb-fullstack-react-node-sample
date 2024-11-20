@@ -18,24 +18,26 @@ receivers:
 
 processors:
   batch:
-  # memory_limiter:
-  #   check_interval: 5s
-  #   limit_mib: 600
-  # resourcedetection:
-  #   detectors: [system]
 
 exporters:
-  debug:
-    verbosity: detailed
   otlp:
     endpoint: https://api-dogfood.honeycomb.io:443
     headers:
+      # If testing start by using the key inline, to eliminate environment issues
+      # "x-honeycomb-team": "< your key here >"
+      # In this case, pull from env.
       "x-honeycomb-team": "${HONEYCOMB_API_KEY}"
 
 service:
+  telemetry:
+    logs:
+      level: "INFO"
+      # development: true
+      encoding: "json"
   pipelines:
     traces:
       receivers: [otlp]
       # processors: [batch, memory_limiter, resourcedetection]
       processors: [batch]
-      exporters: [debug,otlp]
+      # exporters: [debug,otlp]
+      exporters: [otlp]

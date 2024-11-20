@@ -18,7 +18,7 @@ const slowdownMiddleware = (req, res, next) => {
     setTimeout(() => {
         next();
         logger.info('...woke up, what happened?')
-    }, 1000 * Math.random());
+    }, 8000 * Math.random());
 }
 // this should slow down any response by 5 seconds
 app.use(slowdownMiddleware)

@@ -13,7 +13,7 @@ const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumenta
 
 const sdk = new opentelemetry.NodeSDK({
     traceExporter: new OTLPTraceExporter({
-        url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+    // url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
         // only set if sending data directly to honeycomb not through an OTEL Collector
         // headers: {
         //     'X-Honeycomb-Team': process.env.HONEYCOMB_API_KEY
