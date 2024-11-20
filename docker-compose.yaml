@@ -17,26 +17,10 @@ services:
     ports:
       - "3000:3000"
 
-  # otel-validator:
-  #   image: otel/opentelemetry-collector-contrib
-  #   volumes:
-  #     - ./packages/otel-collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
-  #   environment:
-  #     HONEYCOMB_API_KEY: $HONEYCOMB_API_KEY
-  #   entrypoint:
-  #     [otelcol-contrib validate --config /etc/ottelcol-contrib/config.yaml]
-
   otel-collector:
-    # depends_on:
-    #   - otel-validator
-    container_name: otel-collector-man
-    image: otel/opentelemetry-collector:0.114.0
-    # image: otel/opentelemetry-collector
+    image: otel/opentelemetry-collector-contrib:0.114.0
     volumes:
-      # n.b. depending on which collector you use (contrib or standard) the directory 
-      # used to access the collector config changes, so the volume must change as well
-      #- ./packages/otel-collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
-      - ./packages/otel-collector/otel-collector-config.yaml:/etc/otelcol/config.yaml
+      - ./packages/otel-collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     environment:
       HONEYCOMB_API_KEY: $HONEYCOMB_API_KEY
     ports:
