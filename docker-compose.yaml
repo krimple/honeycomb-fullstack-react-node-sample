@@ -15,7 +15,7 @@ services:
       context: packages/server
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "8081:8081"
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.114.0

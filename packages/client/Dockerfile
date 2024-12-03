@@ -8,7 +8,7 @@ COPY nginx/ ./nginx
 
 COPY index.html .
 
-COPY pnpm-lock.yaml .
+COPY package-lock.json .
 
 COPY package.json .
 

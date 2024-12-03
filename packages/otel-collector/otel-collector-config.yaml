@@ -5,11 +5,11 @@ receivers:
         endpoint: 0.0.0.0:4318
         cors:
           allowed_origins:
-            - http://localhost:8080
-            - http://express-server:8080
-            # - "*"
+            - "http://localhost:8080"
+            - "http://localhost:5173"
           # allowed_headers:
-          #   - "*"
+            # - 'Access-Control-Request-Headers'
+            #   - "*"
             # - "Access-Control-Request-Headers"
             # - "Access-Control-Request-Method"
             # - "content-type"
@@ -20,6 +20,8 @@ processors:
   batch:
 
 exporters:
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: https://api-dogfood.honeycomb.io:443
     headers:
@@ -34,10 +36,9 @@ service:
       level: "INFO"
       # development: true
       encoding: "json"
+
   pipelines:
     traces:
       receivers: [otlp]
-      # processors: [batch, memory_limiter, resourcedetection]
       processors: [batch]
-      # exporters: [debug,otlp]
-      exporters: [otlp]
+      exporters: [debug, otlp]
