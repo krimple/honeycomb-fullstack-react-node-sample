@@ -18,7 +18,7 @@ export default function Messenger() {
     // todo - add state tracking here - various steps
     const callFetch = (): Promise<string> => {
         return new Promise((resolve, reject) => {
-            fetch(`${import.meta.env.VITE_APP_SERVER_URL}/api/random-message`, {
+            fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/random-message`, {
                 method: 'POST'
             })
                 .then(response => response.json())

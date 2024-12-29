@@ -5,7 +5,7 @@ services:
       context: packages/client
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "5173:80"
     environment:
       NODE_ENV: production
 
@@ -15,7 +15,7 @@ services:
       context: packages/server
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "9999:8081"
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.114.0

@@ -1,14 +1,12 @@
-// observability.jsx|tsx
-import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
-import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
+import { HoneycombWebSDK } from "@honeycombio/opentelemetry-web";
+import { getWebAutoInstrumentations } from "@opentelemetry/auto-instrumentations-web";
 
 const configDefaults = {
     ignoreNetworkEvents: true,
 }
 
-export default function installOpenTelemetry() {
+export default function OpenTelemetry() {
     try {
-        // doesn't specify SDK endpoint, defaults to us v1/traces endpoint
         const sdk = new HoneycombWebSDK({
             // turn on to get additional tracing info in console log
             // debug: true, // Set to false for production environment.

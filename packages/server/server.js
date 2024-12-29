@@ -33,12 +33,15 @@ app.use(slowdownMiddleware);
 const corsOptions = {
     origin: [
         'http://localhost:5173',
-        'http://localhost:8080'
+        'http://localhost:8080',
+        'https://localhost:5173'
     ],
-    method: ['GET', 'PUT'],
+    method: ['PUT', 'DELETE'],
     "optionsSuccessStatus": 204,
     "preflightContinue": false,
 };
+
+app.use('*', cors(corsOptions));
 
 app.post("/api/random-message", cors(corsOptions), (req, res) => {
   logger.info("about to handle method /api/random-message");
