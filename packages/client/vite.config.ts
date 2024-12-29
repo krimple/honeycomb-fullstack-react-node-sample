@@ -19,12 +19,12 @@ export default defineConfig({
     //   key: fs.readFileSync(path.resolve(__dirname, 'certs/key.pem')),
     //   cert: fs.readFileSync(path.resolve(__dirname, 'certs/cert.pem')),
     // },
-    // proxy: {
-    //   "/api": {
-    //     target: process.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/api/, "/api"),
-    //   },
-    // },
+    proxy: {
+      "/api": {
+        target: process.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/api"),
+      },
+    },
   },
 });
