@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "flyway:migrate": "flyway -url=jdbc:postgresql://localhost:5432/library -user=library_user -password=library_password -locations=filesystem:./migrations migrate"
   },
   "engines": {
     "node": "20.18.0"

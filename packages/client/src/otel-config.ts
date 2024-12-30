@@ -2,6 +2,7 @@
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 
+
 const configDefaults = {
     ignoreNetworkEvents: true,
 }
@@ -24,7 +25,11 @@ export default function installOpenTelemetry() {
                 getWebAutoInstrumentations({
                     // Loads custom configuration for xml-http-request instrumentation.
                     '@opentelemetry/instrumentation-xml-http-request': configDefaults,
-                    '@opentelemetry/instrumentation-fetch': configDefaults,
+                    '@opentelemetry/instrumentation-fetch': {
+                        enabled: true,
+                        ignoreNetworkEvents: true,
+                        propagateTraceHeaderCorsUrls: [new RegExp('localhost:9999')]
+                    },
                     '@opentelemetry/instrumentation-document-load': configDefaults,
                     '@opentelemetry/instrumentation-user-interaction': {
                         enabled: true,

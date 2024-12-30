@@ -10,6 +10,7 @@ export default function OpenTelemetry() {
         const sdk = new HoneycombWebSDK({
             // turn on to get additional tracing info in console log
             // debug: true, // Set to false for production environment.
+
             endpoint: import.meta.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,

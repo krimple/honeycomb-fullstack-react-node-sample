@@ -16,3 +16,10 @@ To run:
 pnpm install
 pnpm -r start
 ```
+## Dependencies
+
+* Flyway (`brew install flyway`)
+* Node.js LTS
+* Docker and compose
+* A Honeycomb account
+
