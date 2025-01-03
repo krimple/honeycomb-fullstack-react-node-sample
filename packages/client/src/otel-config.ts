@@ -1,13 +1,10 @@
-// observability.jsx|tsx
 import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
-import {useEffect} from "react";
-
 
 const configDefaults = {
     ignoreNetworkEvents: true,
-    // TODO - parametize this into .env or something for a less brittle build
+    // TODO - parameterize this into .env or something for a less brittle build
     propagateTraceHeaderCorsUrls: [new RegExp('localhost:9999')]
 }
 
