@@ -40,5 +40,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  flyway:
+    image: flyway/flyway:latest
+    depends_on:
+      - postgres
+    command: -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql migrate
+    volumes:
+      - ./flyway.conf:/flyway/conf/flyway.conf:ro
+      - ./db/migrations:/flyway/sql
+
 volumes:
   postgres_data:

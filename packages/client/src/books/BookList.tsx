@@ -19,7 +19,7 @@ const BookList: React.FC<BookListProps> = ({ books }) => {
       {!books || books?.length === 0 ? (
         <p>No books in the library.</p>
       ) : (
-        <ul className="border rounded p-4">
+        <ul test-id="book-list" className="border rounded p-4">
           {books.map((book) => (
             <li key={book.isbn} className="my-2 p-2 border-b">
               <BookDetails book={book} />

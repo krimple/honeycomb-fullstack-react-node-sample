@@ -15,6 +15,8 @@ export const addBook = async (book: Book) => {
             headers: {
                 'content-type': 'application/json'
             },
+            // TODO - camel case to snake case field mapping - should be a mapping in the server side
+            // perhaps - noting it here because we are sending snake case downstream
             body: JSON.stringify(book)
         });
 

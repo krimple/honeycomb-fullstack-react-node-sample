@@ -17,7 +17,11 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
       <p><strong>ISBN:</strong> {book.isbn}</p>
       <p><strong>Name:</strong> {book.name}</p>
       <p><strong>Description:</strong> {book.description}</p>
-      <p><strong>Publication Date:</strong> {book.publicationDate}</p>
+      <p><strong>Publication Date:</strong> {
+          new Date(book.publicationDate).toLocaleDateString('en-US', {
+             timeZone: 'UTC',
+          })}
+      </p>
     </div>
   );
 };

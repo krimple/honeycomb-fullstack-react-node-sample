@@ -24,9 +24,11 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
     <form onSubmit={handleSubmit} className="my-4 p-4 bg-gray-100 border rounded">
       <h2 className="text-xl font-semibold">Add a New Book</h2>
       <div className="my-2">
-        <label className="block">ISBN:</label>
+        <label className="block" htmlFor="isbn">ISBN:</label>
         <input
+          name="isbn"
           type="text"
+          test-id="isbn"
           value={isbn}
           onChange={(e) => setIsbn(e.target.value)}
           required
@@ -34,9 +36,11 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
         />
       </div>
       <div className="my-2">
-        <label className="block">Name:</label>
+        <label className="block" htmlFor="name">Name:</label>
         <input
+          name="name"
           type="text"
+          test-id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -44,18 +48,22 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
         />
       </div>
       <div className="my-2">
-        <label className="block">Description:</label>
+        <label className="block" htmlFor="description">Description:</label>
         <textarea
+          name="description"
           value={description}
+          test-id="description"
           onChange={(e) => setDescription(e.target.value)}
           required
           className="border rounded p-2 w-full"
         />
       </div>
       <div className="my-2">
-        <label className="block">Publication Date:</label>
+        <label className="block" htmlFor="publicationDate">Publication Date:</label>
         <input
           type="date"
+          name="publicationDate"
+          test-id="publicationDate"
           value={publicationDate}
           onChange={(e) => setPublicationDate(e.target.value)}
           required

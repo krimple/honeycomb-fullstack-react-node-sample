@@ -18,6 +18,7 @@ const pool = new Pool({
     database: 'library',
     password: 'library_password',
     port: 5432,
+
 });
 
 // use before any other routes - require preflight for
@@ -48,8 +49,11 @@ app.use('*', cors(corsOptions));
 app.post('/api/books', async (req, res) => {
     const { isbn, name, description, publicationDate } = req.body;
     try {
+        // note the conversion of camel to snake case in the statement below. Could make systemic
+        // but hey, I'm not trying to slay dragons
         const result = await pool.query(
-            'INSERT INTO books (isbn, name, description, publication_date) VALUES ($1, $2, $3, $4) RETURNING *',
+            `INSERT INTO books (isbn, name, description, publication_date) 
+             VALUES ($1, $2, $3, $4) RETURNING *`,
             [isbn, name, description, publicationDate]
         );
         res.json(result.rows[0]);
@@ -62,7 +66,11 @@ app.post('/api/books', async (req, res) => {
 // Get list of all books
 app.get('/api/books', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM books ORDER BY id ASC');
+        // renaming to camelCase for returned data, ibid
+        const result = await pool.query(
+            `SELECT isbn, name, description, publication_date AS "publicationDate"
+             FROM books 
+             ORDER BY id ASC`);
         res.json(result.rows);
     } catch (err) {
         console.error(err);
