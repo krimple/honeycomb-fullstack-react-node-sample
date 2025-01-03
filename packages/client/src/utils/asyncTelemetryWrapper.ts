@@ -4,7 +4,8 @@ type AsyncFunction = () => Promise<unknown>;
 
 export function asyncTelemetryWrapper<T>(fn: AsyncFunction, spanName: string): Promise<T> {
     // start synchronously
-    const span = trace.getActiveSpan() || trace.getTracer('default').startSpan(spanName || 'async-span');
+    //const span = trace.getActiveSpan() || trace.getTracer('default').startSpan(spanName || 'async-span');
+    const span  = trace.getTracer('default').startSpan(spanName || 'async-span');
 
     if (!span) {
         throw new Error('No active span');
