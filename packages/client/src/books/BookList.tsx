@@ -16,7 +16,7 @@ const BookList: React.FC<BookListProps> = ({ books }) => {
   return (
     <div className="my-4">
       <h2 className="text-xl font-semibold">Book List</h2>
-      {books.length === 0 ? (
+      {!books || books?.length === 0 ? (
         <p>No books in the library.</p>
       ) : (
         <ul className="border rounded p-4">

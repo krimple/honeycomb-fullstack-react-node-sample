@@ -20,8 +20,10 @@ RUN corepack enable
 
 RUN pnpm install
 
+RUN npm install -g bunyan
+
 EXPOSE 3000
 
 ENV OTEL_LOG_LEVEL INFO
 
-CMD ["node", "-r", "./tracing.js", "./index.js"]
+CMD ["node", "-r", "./tracing.js", "./index.js", "|", "bunyan"]

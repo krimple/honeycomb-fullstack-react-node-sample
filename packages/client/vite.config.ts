@@ -13,6 +13,9 @@ dotenv.config({
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+   sourcemap: 'inline'
+  },
   plugins: [react()],
   server: {
     // https: {

@@ -1,10 +1,12 @@
 // observability.jsx|tsx
+import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 
 
 const configDefaults = {
     ignoreNetworkEvents: true,
+    propagateTraceHeaderCorsUrls: [new RegExp('localhost:9999')]
 }
 
 export default function installOpenTelemetry() {
@@ -16,6 +18,7 @@ export default function installOpenTelemetry() {
             endpoint: import.meta.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,
+            contextManager: new StackContextManager(),
             // NOTE - only enable if you aren't using an OTEL collector endpoint
             // apiKey: import.meta.env.VITE_HONEYCOMB_API_KEY,
             // NOTE - turning on if I am pointing to the non-default HC endpoint
@@ -25,11 +28,7 @@ export default function installOpenTelemetry() {
                 getWebAutoInstrumentations({
                     // Loads custom configuration for xml-http-request instrumentation.
                     '@opentelemetry/instrumentation-xml-http-request': configDefaults,
-                    '@opentelemetry/instrumentation-fetch': {
-                        enabled: true,
-                        ignoreNetworkEvents: true,
-                        propagateTraceHeaderCorsUrls: [new RegExp('localhost:9999')]
-                    },
+                    '@opentelemetry/instrumentation-fetch': configDefaults,
                     '@opentelemetry/instrumentation-document-load': configDefaults,
                     '@opentelemetry/instrumentation-user-interaction': {
                         enabled: true,

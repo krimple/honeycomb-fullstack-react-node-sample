@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import {Book} from "./types.ts";
 
 interface AddBookFormProps {
-  onAddBook: (book: { isbn: string; name: string; description: string; publicationDate: string }) => void;
+  onAddBook: (book: Book) => void;
 }
 
 const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {

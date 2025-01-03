@@ -37,7 +37,8 @@ service:
     logs:
       level: "INFO"
       # development: true
-      encoding: "json"
+      # uncomment this if consuming logs in software
+      # encoding: "json"
 
   pipelines:
     traces:

@@ -35,7 +35,8 @@ const bunyan = require("bunyan");
 
 const logger = bunyan.createLogger({
   name: "backend",
-  level: "warn"
+  level: "warn",
+
 });
 
 module.exports = logger;

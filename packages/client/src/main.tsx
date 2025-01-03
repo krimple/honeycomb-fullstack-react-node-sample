@@ -7,7 +7,6 @@ import installOpenTelemetry from "./otel-config.ts";
 
 installOpenTelemetry();
 createRoot(document.getElementById('root')!).render(
-
     <StrictMode>
       <App />
     </StrictMode>
