@@ -2,10 +2,12 @@
 import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
+import {useEffect} from "react";
 
 
 const configDefaults = {
     ignoreNetworkEvents: true,
+    // TODO - parametize this into .env or something for a less brittle build
     propagateTraceHeaderCorsUrls: [new RegExp('localhost:9999')]
 }
 
@@ -19,9 +21,13 @@ export default function installOpenTelemetry() {
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,
             contextManager: new StackContextManager(),
+
             // NOTE - only enable if you aren't using an OTEL collector endpoint
             // apiKey: import.meta.env.VITE_HONEYCOMB_API_KEY,
-            // NOTE - turning on if I am pointing to the non-default HC endpoint
+
+            // NOTE - turning this on - I am pointing to the non-default HC endpoint
+            // (the otel collector defined in /otel-collector and kicked off in
+            // the docker-compose.yml file)
             skipOptionsValidation: true,
             serviceName: import.meta.env.VITE_OTEL_SERVICE_NAME,
             instrumentations: [
