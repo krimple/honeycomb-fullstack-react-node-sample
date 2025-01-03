@@ -13,8 +13,14 @@ It is a simple demo to show the minimum configuration needed to:
 To run:
 
 ```
-pnpm install
-pnpm -r start
+# in one window (or detach)
+docker compose up --build
+
+# in other window (after any docker compose down -v or first time)
+# you have to run the migrations to the postgres database to allow
+# table inserts
+npm install
+npm run flyway:migrate
 ```
 ## Dependencies
 

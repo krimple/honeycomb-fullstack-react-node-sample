@@ -2,6 +2,10 @@ import { useState, useCallback } from "react";
 import { trace } from '@opentelemetry/api';
 
 
+/**
+ * OLD CODE - will gut soon
+ * @constructor
+ */
 export default function Messenger() {
     const [messages, setMessages] = useState<string[]>([]);
     const [buttonsEnabled, setButtonsEnabled] = useState(true);
