@@ -16,7 +16,6 @@ export function asyncTelemetryWrapper<T>(fn: AsyncFunction, spanName: string): P
         context.with(trace.setSpan(context.active(), span), () => {
             return fn()
               .then((response) => {
-                  span.end();
                   resolve(response as T);
               })
               .catch((e: Error) => {
@@ -24,9 +23,32 @@ export function asyncTelemetryWrapper<T>(fn: AsyncFunction, spanName: string): P
                       code: SpanStatusCode.ERROR,
                       message: e.message || ''
                   });
-                  span.end();
                   reject(e);
-              });
+              })
+                .finally(() => {span.end()})
+        });
+    });
+}
+
+export function doAsyncWithTelemetryNoResults(fn: AsyncFunction, spanName: string): Promise<void> {
+    const span  = trace.getTracer('default').startSpan(spanName || 'async-span');
+
+    if (!span) {
+        throw new Error('No active span');
+    }
+
+    return new Promise<void>((resolve, reject) => {
+        context.with(trace.setSpan(context.active(), span), () => {
+            return fn()
+                .then(() => { resolve(undefined); })
+                .catch((e: Error) => {
+                    span.setStatus({
+                        code: SpanStatusCode.ERROR,
+                        message: e.message || ''
+                    });
+                    reject(e);
+                })
+                .finally(() => {span.end()})
         });
     });
 }

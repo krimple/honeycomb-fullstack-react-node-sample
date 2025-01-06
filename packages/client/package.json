@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@honeycombio/opentelemetry-web": "^0.9.0",
+    "@openfeature/flagd-web-provider": "^0.7.2",
+    "@openfeature/js-sdk": "^1.6.1",
+    "@openfeature/web-sdk": "^1.4.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-web": "^0.42.0",
     "@opentelemetry/sdk-trace-web": "^1.30.0",

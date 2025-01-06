@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import AddBookForm from "./AddBookForm";
 import BookList from "./BookList";
 import {Book} from "./types.ts";
-import {addBook, fetchBooks} from "./book-api.ts";
+import {addBook, fetchBooks} from "./api/book-api.ts";
 
 const BookLibrary: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);

@@ -49,5 +49,15 @@ services:
       - ./flyway.conf:/flyway/conf/flyway.conf:ro
       - ./db/migrations:/flyway/sql
 
+# todo - get this working
+  flagd:
+    image: ghcr.io/open-feature/flagd:latest
+    container_name: flagd
+    ports:
+      - "8013:8013" # Expose the flagd server
+    volumes:
+      - ./flagd/flagd.json:/etc/flagd/flagd.json:ro
+    command: ["start",  "--uri=file:///etc/flagd/flagd.json"]
+
 volumes:
   postgres_data:

@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 const logger = require("./logger");
 const { Pool }  = require('pg');
 
-const generateNonsenseSentence = require("./werds");
-
 logger.info("Hello, world!");
 
 const app = express();

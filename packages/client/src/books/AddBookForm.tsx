@@ -70,7 +70,10 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
           className="border rounded p-2 w-full"
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+      <button
+          role="button"
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded">
         Add Book
       </button>
     </form>

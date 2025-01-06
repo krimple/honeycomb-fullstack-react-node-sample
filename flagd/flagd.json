@@ -1,0 +1,12 @@
+{
+  "flags": {
+    "asyncCallType": {
+      "state": "ENABLED",
+      "defaultVariant": "promise",
+      "variants": {
+        "promise": "promise",
+        "async": "async"
+      }
+    }
+  }
+}

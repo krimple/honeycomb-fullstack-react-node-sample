@@ -13,7 +13,8 @@ export default function installOpenTelemetry() {
         // doesn't specify SDK endpoint, defaults to us v1/traces endpoint
         const sdk = new HoneycombWebSDK({
             // turn on to get additional tracing info in console log
-            // debug: true, // Set to false for production environment.
+            debug: true, // Set to false for production environment.
+
             endpoint: import.meta.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,
@@ -31,7 +32,7 @@ export default function installOpenTelemetry() {
                 getWebAutoInstrumentations({
                     // Loads custom configuration for xml-http-request instrumentation.
                     '@opentelemetry/instrumentation-xml-http-request': configDefaults,
-                    '@opentelemetry/instrumentation-fetch': configDefaults,
+                    '@opentelemetry/instrumentation-fetch': { ...configDefaults, applyCustomAttributesOnSpan: () => true },
                     '@opentelemetry/instrumentation-document-load': configDefaults,
                     '@opentelemetry/instrumentation-user-interaction': {
                         enabled: true,

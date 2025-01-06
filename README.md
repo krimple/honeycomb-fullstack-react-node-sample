@@ -13,6 +13,8 @@ It is a simple demo to show the minimum configuration needed to:
 
 To run:
 
+1. Login to docker (`docker login`)
+2. Login to dhcr.io (`docker login ghcr.io`)
 ```
 docker compose up --build
 ```
