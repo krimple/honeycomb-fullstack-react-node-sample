@@ -1,12 +1,11 @@
-import {asyncTelemetryWrapper} from "../../utils/asyncTelemetryWrapper.ts";
 import {Book} from "../types.ts";
-import {client} from "../../utils/feature-flags/flagdClient.ts";
+import {otelWrapperWithResponse} from "../../utils/otel/otelWrapperWithResponse.ts";
+import {otelWrapper} from "../../utils/otel/otelWrapper.ts";
 
 const resourceEndpoint = `${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`;
 
-// TODO - install streaming API to update when flags change
-const functionMode = client.getStringValue('functionMode', 'unknown');
-console.log(functionMode);
+// TODO: super cheapo dummy feature flag - use flagd later
+const functionMode = import.meta.env.VITE_PUBLIC_FF_API_CALL_TYPE;
 
 export const fetchBooks = (): Promise<Book[]> => {
     // hoping for auto instrumentation
@@ -20,7 +19,7 @@ export const fetchBooks = (): Promise<Book[]> => {
 }
 
 async function fetchBooksAsync() : Promise<Book[]> {
-    return asyncTelemetryWrapper<Book[]>(async () => {
+    return otelWrapperWithResponse<Book[]>(async () => {
         const result = await fetch(resourceEndpoint);
         return await result.json() as Book[];
     }, 'fetchBooks');
@@ -39,7 +38,30 @@ function fetchBooksPromise() : Promise<Book[]> {
 }
 
 export const addBook = async (book: Book) => {
-    return asyncTelemetryWrapper<void>(async () => {
+    if (functionMode === 'promise') {
+        console.log('using promises')
+        return addBookPromises(book);
+    } else {
+        console.log('using async/await');
+        return addBookAsync(book);
+    }
+};
+
+function addBookPromises(book: Book) {
+    return fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`, {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        // TODO - camel case to snake case field mapping - should be a mapping in the server side
+        // perhaps - noting it here because we are sending snake case downstream
+        body: JSON.stringify(book)
+    });
+
+}
+
+async function addBookAsync(book: Book) {
+    return otelWrapper(async () => {
         const result = await fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`, {
             method: 'POST',
             headers: {

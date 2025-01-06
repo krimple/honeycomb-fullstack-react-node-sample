@@ -1,6 +1,7 @@
 import {context, SpanStatusCode, trace} from "@opentelemetry/api";
 
 type AsyncFunction = () => Promise<unknown>;
+const tracer = trace.getTracer('default');
 
 /**
  * Generates a new span in OpenTelemetry and runs a Promise or async function within it.
@@ -16,16 +17,10 @@ type AsyncFunction = () => Promise<unknown>;
  *  });
  * ```
  * @param fn the _thenable_ method to run (your async method here), which will return the type passed in `T` or throw an Error
- * @param spanName the name for the newly created span, since we're not wrapping via auto instrumentation. Defaults to 'async-span'
+ * @param spanName the name for the newly created span, since we're not wrapping via auto instrumentation. Defaults to 'otelWrapperWithResponse'
  */
-export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string): Promise<T> {
-    const span  = trace.getTracer('default').startSpan(spanName || 'async-span');
-
-    // TODO - evaulate a better option here
-    // This is a problem, though maybe you don't want to blow up the app?
-    if (!span) {
-        throw new Error('No active span');
-    }
+export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string = 'otelWrapperWithResponse'): Promise<T> {
+    const span  = tracer.startSpan(spanName);
 
     // treat the async function as a promise
     return new Promise<T>((resolve, reject) => {
