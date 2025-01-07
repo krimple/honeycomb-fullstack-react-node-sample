@@ -10,8 +10,10 @@ const functionMode = import.meta.env.VITE_PUBLIC_FF_API_CALL_TYPE;
 
 export const fetchBooks = (): Promise<Book[]> => {
     const span = trace.getActiveSpan();
+    console.log('Span name for fetchBooks is');
+    console.dir(span);
     // hoping for auto instrumentation
-    span?.setAttribute('app.api.call.type', functionMode);
+    span?.setAttribute('app.api.call.type', functionMode || 'not configured');
     if (functionMode === 'promise') {
        console.log('using promises')
         return fetchBooksPromise();
@@ -41,16 +43,18 @@ function fetchBooksPromise() : Promise<Book[]> {
 }
 
 export const addBook = async (book: Book) => {
+    const span =  trace.getActiveSpan();
+    console.dir(span);
+        //?.setAttribute('app.api.call.type', functionMode || 'not configured');
     if (functionMode === 'promise') {
-        console.log('using promises')
         return addBookPromises(book);
     } else {
-        console.log('using async/await');
         return addBookAsync(book);
     }
 };
 
 function addBookPromises(book: Book) {
+
     return fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`, {
         method: 'POST',
         headers: {
@@ -80,11 +84,12 @@ async function addBookAsync(book: Book) {
                 return;
             } else {
                 alert(result.statusText);
-                return Promise.reject(result.statusText);
+                throw new Error(result.statusText);
             }
         } catch (e) {
             alert(JSON.stringify(e));
             console.log(e);
+            throw e;
         }
     }, 'addBook');
 }

@@ -57,7 +57,7 @@ export default function installOpenTelemetry() {
 
         // console.dir(sdk);
 
-        // @ts-expect-error blah blah ginger
+        // @ts-expect-error blah blah ginger see Gary Larson
         sdk['_tracerProvider']['_registeredSpanProcessors'].forEach(item => {
             console.log('Type of processor item', typeof item);
             if (item['_sessionId']) {

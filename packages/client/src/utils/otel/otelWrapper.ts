@@ -29,15 +29,17 @@ type AsyncFunction = () => Promise<void>;
 export function otelWrapper(fn: AsyncFunction, spanName: string = 'otelWrapper'): Promise<void> {
     // Attach to active span or create a new one if none is active
     return tracer.startActiveSpan(spanName, span => {
+        console.log(`otelWrapperWithResponse`);
+        console.dir(span.setAttribute('app.api.call.type', 'async'));
         return new Promise<void>((resolve, reject) => {
             // this is the otel wrapping magic - add a new span to the active context
             // and this will send the telemetry around the method we wrap
                 fn()
-                    .then(() => {
+                    .then((result) => {
                         span.setStatus({
                             code: SpanStatusCode.OK
                         });
-                        resolve();
+                        resolve(result);
                     })
                     .catch((e: Error) => {
                         span.setStatus({
@@ -45,6 +47,7 @@ export function otelWrapper(fn: AsyncFunction, spanName: string = 'otelWrapper')
                             // TODO - could be more explicit, maybe JSON.stringify, etc.
                             message: e.message || 'No error message'
                         });
+                        span.recordException(e);
                         reject(e);
                     })
                     .finally(() => {span.end()})

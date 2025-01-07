@@ -21,6 +21,8 @@ const tracer = trace.getTracer('default');
  */
 export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string = 'otelWrapperWithResponse'): Promise<T> {
     return tracer.startActiveSpan(spanName, span => {
+        console.log(`otelWrapperWithResponse`);
+        console.dir(span.setAttribute('app.api.call.type', 'async'));
         return new Promise<T>((resolve, reject) => {
             return fn()
                 .then((response) => {
