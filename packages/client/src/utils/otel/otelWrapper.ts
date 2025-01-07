@@ -1,4 +1,4 @@
-import {context, SpanStatusCode, trace} from "@opentelemetry/api";
+import {SpanStatusCode, trace} from "@opentelemetry/api";
 
 const tracer = trace.getTracer('default');
 type AsyncFunction = () => Promise<void>;
@@ -28,24 +28,26 @@ type AsyncFunction = () => Promise<void>;
  */
 export function otelWrapper(fn: AsyncFunction, spanName: string = 'otelWrapper'): Promise<void> {
     // Attach to active span or create a new one if none is active
-    const span  = tracer.startSpan(spanName);
-
-    // treat the async function as a promise
-    return new Promise<void>((resolve, reject) => {
-        // this is the otel wrapping magic - add a new span to the active context
-        // and this will send the telemetry around the method we wrap
-        context.with(trace.setSpan(context.active(), span), () => {
-            return fn()
-                .then(() => { resolve(); })
-                .catch((e: Error) => {
-                    span.setStatus({
-                        code: SpanStatusCode.ERROR,
-                        // TODO - could be more explicit, maybe JSON.stringify, etc.
-                        message: e.message || 'No error message'
-                    });
-                    reject(e);
-                })
-                .finally(() => {span.end()})
+    return tracer.startActiveSpan(spanName, span => {
+        return new Promise<void>((resolve, reject) => {
+            // this is the otel wrapping magic - add a new span to the active context
+            // and this will send the telemetry around the method we wrap
+                fn()
+                    .then(() => {
+                        span.setStatus({
+                            code: SpanStatusCode.OK
+                        });
+                        resolve();
+                    })
+                    .catch((e: Error) => {
+                        span.setStatus({
+                            code: SpanStatusCode.ERROR,
+                            // TODO - could be more explicit, maybe JSON.stringify, etc.
+                            message: e.message || 'No error message'
+                        });
+                        reject(e);
+                    })
+                    .finally(() => {span.end()})
+            });
         });
-    });
 }

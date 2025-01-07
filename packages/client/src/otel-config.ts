@@ -1,6 +1,7 @@
 import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
+import * as api from "@opentelemetry/api";
 
 const configDefaults = {
     ignoreNetworkEvents: true,
@@ -32,7 +33,18 @@ export default function installOpenTelemetry() {
                 getWebAutoInstrumentations({
                     // Loads custom configuration for xml-http-request instrumentation.
                     '@opentelemetry/instrumentation-xml-http-request': configDefaults,
-                    '@opentelemetry/instrumentation-fetch': { ...configDefaults, applyCustomAttributesOnSpan: () => true },
+                    '@opentelemetry/instrumentation-fetch': {
+                        ...configDefaults,
+                        applyCustomAttributesOnSpan: (span: api.Span, request: Request | RequestInit) => {
+                            const headers = request instanceof Request ? request.headers : new Headers(request?.headers);
+                            headers?.forEach((value, key) => {
+                                console.log(key, value);
+                                if (key === 'Content-Type') {
+                                    span.setAttribute('app.content.type', value);
+                                }
+                            });
+                        },
+                    },
                     '@opentelemetry/instrumentation-document-load': configDefaults,
                     '@opentelemetry/instrumentation-user-interaction': {
                         enabled: true,

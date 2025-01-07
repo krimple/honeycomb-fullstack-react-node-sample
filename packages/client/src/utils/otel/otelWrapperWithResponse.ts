@@ -1,4 +1,4 @@
-import {context, SpanStatusCode, trace} from "@opentelemetry/api";
+import {SpanStatusCode, trace} from "@opentelemetry/api";
 
 type AsyncFunction = () => Promise<unknown>;
 const tracer = trace.getTracer('default');
@@ -20,15 +20,14 @@ const tracer = trace.getTracer('default');
  * @param spanName the name for the newly created span, since we're not wrapping via auto instrumentation. Defaults to 'otelWrapperWithResponse'
  */
 export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string = 'otelWrapperWithResponse'): Promise<T> {
-    const span  = tracer.startSpan(spanName);
-
-    // treat the async function as a promise
-    return new Promise<T>((resolve, reject) => {
-        // this is the otel wrapping magic - add a new span to the active context
-        // and this will send the telemetry around the method we wrap
-        context.with(trace.setSpan(context.active(), span), () => {
+    return tracer.startActiveSpan(spanName, span => {
+        return new Promise<T>((resolve, reject) => {
             return fn()
                 .then((response) => {
+                    // by default, UNSET, so you can decide to set the status of the
+                    span.setStatus({
+                        code: SpanStatusCode.OK
+                    });
                     resolve(response as T);
                 })
                 .catch((e: Error) => {
@@ -39,7 +38,9 @@ export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string =
                     });
                     reject(e);
                 })
-                .finally(() => {span.end()})
+                .finally(() => {
+                    span.end()
+                })
         });
     });
 }
