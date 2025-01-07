@@ -1,6 +1,7 @@
 import {Book} from "../types.ts";
 import {otelWrapperWithResponse} from "../../utils/otel/otelWrapperWithResponse.ts";
 import {otelWrapper} from "../../utils/otel/otelWrapper.ts";
+import {trace} from "@opentelemetry/api";
 
 const resourceEndpoint = `${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`;
 
@@ -8,10 +9,12 @@ const resourceEndpoint = `${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/book
 const functionMode = import.meta.env.VITE_PUBLIC_FF_API_CALL_TYPE;
 
 export const fetchBooks = (): Promise<Book[]> => {
+    const span = trace.getActiveSpan();
     // hoping for auto instrumentation
+    span?.setAttribute('app.api.call.type', functionMode);
     if (functionMode === 'promise') {
-        console.log('using promises')
-        return fetchBooksPromise()
+       console.log('using promises')
+        return fetchBooksPromise();
     } else {
         console.log('using async/await');
         return fetchBooksAsync();

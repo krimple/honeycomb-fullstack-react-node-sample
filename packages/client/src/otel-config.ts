@@ -54,6 +54,16 @@ export default function installOpenTelemetry() {
             ],
         });
         sdk.start();
+
+        // console.dir(sdk);
+
+        // @ts-expect-error blah blah ginger
+        sdk['_tracerProvider']['_registeredSpanProcessors'].forEach(item => {
+            console.log('Type of processor item', typeof item);
+            if (item['_sessionId']) {
+                console.log('Session ID?', `https://ui-dogfood.honeycomb.io/empire-of-software/environments/ken-dev/datasets/react-frontend/session-timeline-experiment/${item['_sessionId']}`);
+            }
+        });
     } catch (e) {
         console.log(`An error occurred wiring up the collector...`);
         console.error(e);
