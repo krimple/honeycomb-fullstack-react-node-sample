@@ -24,15 +24,11 @@ export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string =
         return new Promise<T>((resolve, reject) => {
             return fn()
                 .then((response) => {
-                    return response.json();
                     // by default, UNSET, so you can decide to set the status of the
-               })
-                .then(())
-            span.setStatus({
-                code: SpanStatusCode.OK
-            });
-
-            resolve(response as T);
+                    span.setStatus({
+                        code: SpanStatusCode.OK
+                    });
+                    resolve(response as T);
                 })
                 .catch((e: Error) => {
                     span.setStatus({
