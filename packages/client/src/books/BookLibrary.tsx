@@ -13,9 +13,13 @@ const BookLibrary: React.FC = () => {
     }, []);
 
     const handleAddBook = useCallback(async (book: Book) => {
-        await addBook(book);
-        const books = await fetchBooks();
-        setBooks(books);
+        try {
+            await addBook(book);
+            const books = await fetchBooks();
+            setBooks(books);
+        } catch (e) {
+            alert(e);
+        }
     }, []);
 
     return (

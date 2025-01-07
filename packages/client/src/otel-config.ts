@@ -1,4 +1,4 @@
-import { StackContextManager } from '@opentelemetry/sdk-trace-web';
+// import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import * as api from "@opentelemetry/api";
@@ -19,7 +19,7 @@ export default function installOpenTelemetry() {
             endpoint: import.meta.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,
-            contextManager: new StackContextManager(),
+            // contextManager: new StackContextManager(),
 
             // NOTE - only enable if you aren't using an OTEL collector endpoint
             // apiKey: import.meta.env.VITE_HONEYCOMB_API_KEY,

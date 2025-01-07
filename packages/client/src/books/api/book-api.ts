@@ -62,18 +62,26 @@ function addBookPromises(book: Book) {
 
 async function addBookAsync(book: Book) {
     return otelWrapper(async () => {
-        const result = await fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            // TODO - camel case to snake case field mapping - should be a mapping in the server side
-            // perhaps - noting it here because we are sending snake case downstream
-            body: JSON.stringify(book)
-        });
+        try {
+            const result = await fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                // TODO - camel case to snake case field mapping - should be a mapping in the server side
+                // perhaps - noting it here because we are sending snake case downstream
+                body: JSON.stringify(book)
+            });
 
-        if (result.ok) {
-            return;
+            if (result.ok) {
+                return;
+            } else {
+                alert(result.statusText);
+                return Promise.reject(result.statusText);
+            }
+        } catch (e) {
+            alert(JSON.stringify(e));
+            console.log(e);
         }
     }, 'addBook');
 }
