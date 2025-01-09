@@ -9,5 +9,4 @@
 
 ## Not implemented
 
-1. Proper build script or CI
-2. Production build (coming)
+1. Proper CI

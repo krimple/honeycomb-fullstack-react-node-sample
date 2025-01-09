@@ -6,7 +6,11 @@ import * as api from "@opentelemetry/api";
 const configDefaults = {
     ignoreNetworkEvents: true,
     // TODO - parameterize this into .env or something for a less brittle build
-    propagateTraceHeaderCorsUrls: [new RegExp('localhost:9999')]
+    propagateTraceHeaderCorsUrls: [
+        // defaulting to every outgoing host
+        /.+/g,
+        //import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP
+    ]
 }
 
 export default function installOpenTelemetry() {

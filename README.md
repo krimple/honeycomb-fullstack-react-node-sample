@@ -11,13 +11,24 @@ It is a simple demo to show the minimum configuration needed to:
 3. Pick up and trace incoming routes to Express in a Node.js application
 4. Follow the trace to the handlers, with introduced latency in a middleware function
 
-To run:
+### Setup
 
-1. Login to docker (`docker login`)
-2. Login to dhcr.io (`docker login ghcr.io`)
+1. cp packages/client/.env-sample packages/client/.env
+2. cp packages/server/.env-sample packages/server/.env
+3. cp .env-sample .env and change the `HONEYCOMB_API_KEY` to your Honeycomb ingest key so the collector can send data to honeycomb
+4. Login to docker (`docker login`)
+5. Login to dhcr.io (`docker login ghcr.io`)
+
+### Build and run
+
 ```
 docker compose up --build
 ```
+Note: JSON-based logging via bunyan for app server in docker logs, as is all container builds, database and other logging information
+
+### Access the frontend
+
+The react fronend is hosted at `http://localhost:5173` 
 
 ## Dependencies
 

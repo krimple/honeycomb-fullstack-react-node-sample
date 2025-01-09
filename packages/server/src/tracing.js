@@ -4,8 +4,8 @@ require("dotenv").config();
 const logger = require("./logger");
 
 const { OTEL_EXPORTER_OTLP_ENDPOINT, OTEL_SERVICE_NAME } = process.env;
-console.debug(`URL: ${OTEL_EXPORTER_OTLP_ENDPOINT}`);
-console.debug(`SERVICE NAME: ${OTEL_SERVICE_NAME}`);
+logger.debug(`URL: ${OTEL_EXPORTER_OTLP_ENDPOINT}`);
+logger.debug(`SERVICE NAME: ${OTEL_SERVICE_NAME}`);
 
 const opentelemetry = require("@opentelemetry/sdk-node");
 
@@ -31,7 +31,7 @@ const sdk = new opentelemetry.NodeSDK({
   instrumentations: [getNodeAutoInstrumentations(), new BunyanInstrumentation()],
 });
 
-console.log("Starting OpenTelemetry Node SDK");
+logger.debug("Starting OpenTelemetry Node SDK");
 sdk.start();
 
 // make sure we flush last logs if terminating

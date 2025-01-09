@@ -18,7 +18,7 @@ const BookLibrary: React.FC = () => {
             })
             .catch(e => {
                 console.dir(e);
-                setStatus(`Error loading books: ${e.message}`);
+                setStatus(`Error loading books: ${JSON.stringify(e)}`);
             });
     }, []);
 
@@ -31,7 +31,8 @@ const BookLibrary: React.FC = () => {
             setStatus(`${books.length} Books loaded`);
             setBooks(books);
         } catch (e) {
-            setStatus(`Error adding book: ${e}`);
+            console.dir(e);
+            setStatus(`Error adding book: ${JSON.stringify(e)}`);
         }
     }, []);
 

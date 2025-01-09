@@ -1,6 +1,7 @@
 const { trace, context } = require("@opentelemetry/api");
 const bunyan = require("bunyan");
 
+// TODO - get bunyan streaming to otel as a log message stream
 /*const otelStream = {
   write: (logRecord) => {
     console.log(`writing log record ${JSON.stringify(logRecord, null, 2)}`);

@@ -16,9 +16,7 @@ COPY .env .
 
 RUN ls -l
 
-RUN corepack enable
-
-RUN pnpm install
+RUN npm install
 
 RUN npm install -g bunyan
 
@@ -26,4 +24,4 @@ EXPOSE 3000
 
 ENV OTEL_LOG_LEVEL INFO
 
-CMD ["node", "-r", "/app/dist/tracing.js", "/app/dist/index.js", "|", "bunyan"]
+CMD ["node", "-r", "dotenv/config", "-r", "/app/dist/tracing.js", "/app/dist/index.js", "|", "bunyan"]

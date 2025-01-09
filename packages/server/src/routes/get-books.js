@@ -1,4 +1,5 @@
 const {getPool} = require("../db/pool");
+const logger = require("../logger");
 
 
 const getBooks = async (req, res) => {
@@ -11,9 +12,8 @@ const getBooks = async (req, res) => {
              ORDER BY id ASC`);
         res.json(result.rows);
     } catch (err) {
-        console.dir(err);
-        console.error(err);
-        res.status(err.code).json({ error: 'Internal server error' });
+        logger.error(err);
+        res.status(500);
     }
 };
 
