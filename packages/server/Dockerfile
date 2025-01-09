@@ -6,7 +6,7 @@ COPY package-lock.json .
 
 COPY package.json .
 
-COPY *.js .
+COPY src ./dist
 
 COPY *.json .
 
@@ -26,4 +26,4 @@ EXPOSE 3000
 
 ENV OTEL_LOG_LEVEL INFO
 
-CMD ["node", "-r", "./tracing.js", "./index.js", "|", "bunyan"]
+CMD ["node", "-r", "/app/dist/tracing.js", "/app/dist/index.js", "|", "bunyan"]

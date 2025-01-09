@@ -4,12 +4,13 @@ import {Book} from "./types.ts";
 interface AddBookFormProps {
   onAddBook: (book: Book) => void;
 }
+const currDate = () => { return new Date().toISOString().split('T')[0];}
 
 const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
-  const [isbn, setIsbn] = useState("");
+ const [isbn, setIsbn] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [publicationDate, setPublicationDate] = useState("");
+  const [publicationDate, setPublicationDate] = useState(currDate());
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +18,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
     setIsbn("");
     setName("");
     setDescription("");
-    setPublicationDate("");
+    setPublicationDate(currDate());
   };
 
   return (

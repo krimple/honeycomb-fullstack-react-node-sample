@@ -1,2 +1,2 @@
 source .env
-nodemon -r ./tracing.js ./index.js
+nodemon -r ./src/tracing.js ./src/index.js
