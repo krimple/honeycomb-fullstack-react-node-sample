@@ -3,16 +3,16 @@ import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import * as api from "@opentelemetry/api";
 console.log('*******************************');
-console.log(import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP);
+const PROPAGATION_REGEXP = import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP;
+console.log('PROPAGATION_REGEXP', PROPAGATION_REGEXP);
 
 const configDefaults = {
     ignoreNetworkEvents: true,
     propagateTraceHeaderCorsUrls: [
-        // TODO - get a working syntax on regexp in config file - this fails currently because of it not being
-        // a valid rexexp but a string instead
-        // RegExp(import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP)
-        // but this works
-        /.+/g
+        // Example value in .env:  ".*"
+        new RegExp(PROPAGATION_REGEXP),
+        // Example inline literal regexp:
+        // /.*/g
     ]
 }
 
