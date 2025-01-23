@@ -17,7 +17,7 @@ It is a simple demo to show the minimum configuration needed to:
 2. cp packages/server/.env-sample packages/server/.env
 3. cp .env-sample .env and change the `HONEYCOMB_API_KEY` to your Honeycomb ingest key so the collector can send data to honeycomb
 4. Login to docker (`docker login`)
-5. Login to dhcr.io (`docker login ghcr.io`)
+5. Login to ghcr.io (`docker login ghcr.io`)
 
 ### Build and run
 
@@ -28,7 +28,7 @@ Note: JSON-based logging via bunyan for app server in docker logs, as is all con
 
 ### Access the frontend
 
-The react fronend is hosted at `http://localhost:5173` 
+The react frontend is hosted at `http://localhost:5173` 
 
 ## Dependencies
 
