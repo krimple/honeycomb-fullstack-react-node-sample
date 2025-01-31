@@ -28,6 +28,7 @@ type AsyncFunction = () => Promise<void>;
  */
 export function otelWrapper(fn: AsyncFunction, spanName: string = 'otelWrapper'): Promise<void> {
     // Attach to active span or create a new one if none is active
+    // See https://jessitron.com/2022/02/08/startspan-vs-startactivespan-in-opentelemetry-js/
     return tracer.startActiveSpan(spanName, span => {
         return new Promise<void>((resolve, reject) => {
             // this is the otel wrapping magic - add a new span to the active context
