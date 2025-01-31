@@ -24,9 +24,11 @@ RUN ls -l
 
 RUN corepack enable
 
-RUN pnpm install
+# RUN pnpm install
 
 RUN pnpm run build
+
+# RUN npm run build
 
 FROM nginx:stable-alpine
 
