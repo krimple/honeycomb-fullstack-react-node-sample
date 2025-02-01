@@ -103,32 +103,46 @@ const BookLibrary: React.FC = () => {
     }, []);
 
     // not sure if this really tests async quite enough - since it all appears to be a promise
+    // probably explode this out and call three different methods with their own call semantics
+    // TODO also add delays before resolving for each of these so we get more than scheduled task in parallel
     const raceToLoadBooks = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         for (let i = 0; i < 5; i++) {
             switch (functionMode) {
                 case 'promise': {
+                    setTimeout(() => {
                     // inline call and resolve 
-                    fetchBooksPromise().then(data => {
-                        // race away, condition!
-                        setBooks(data);
-                        setStatus(`${data.length} Books loaded`);
-                    });
+                        fetchBooksPromise()
+                        .then((response: Book[]) => {
+                            return new Promise((resolve) => {
+                                setTimeout(() => {
+                                    setBooks(response)
+                                    resolve(true);
+                                }, 1000);
+                            })
+                        })
+                    }, Math.random() * 3000);
+                    // inline call and resolve 
                     break;
                 }
                 case 'async-unwrapped': {
                     (async() => {
-                        const data = await fetchBooksAsyncUnwrapped();
-                        setBooks(data);
-                        setStatus(`${data.length} Books loaded`);
+                        setTimeout(async () => {
+                            const data = await fetchBooksAsyncUnwrapped();
+                            setBooks(data);
+                            setStatus(`${data.length} Books loaded`);
+
+                        }, Math.random() * 1000);
                     })();
                     break;
                 }
                 case 'async': {
                     (async() => {
-                        const data = await fetchBooksAsync();
-                        setBooks(data);
-                        setStatus(`${data.length} Books loaded`);
+                        setTimeout(async () => {
+                            const data = await fetchBooksAsync();
+                            setBooks(data);
+                            setStatus(`${data.length} Books loaded`);
+                        }, Math.random() * 1000);
                     })();
                     break;
                 } 

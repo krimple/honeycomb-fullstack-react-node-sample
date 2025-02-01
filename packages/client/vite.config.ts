@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import * as dotenv from "dotenv";
-import bundlesize from "vite-plugin-bundlesize";
 
 // import fs from "fs";
 import path from "path";
@@ -16,9 +15,9 @@ dotenv.config({
 // https://vite.dev/config/
 export default defineConfig({
   build: {
-   sourcemap: 'hidden',
+   sourcemap: 'inline',
   },
-  plugins: [react(), bundlesize()],
+  plugins: [react()],
   server: {
     // https: {
     //   key: fs.readFileSync(path.resolve(__dirname, 'certs/key.pem')),

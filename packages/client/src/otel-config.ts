@@ -1,5 +1,5 @@
 // import one of these if you want to experiment with using it as a context manager
-import { ZoneContextManager } from '@opentelemetry/context-zone';
+// import { ZoneContextManager } from '@opentelemetry/context-zone';
 // import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
@@ -30,7 +30,7 @@ export default function installOpenTelemetry() {
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,
             // contextManager: new StackContextManager(),
-            contextManager: new ZoneContextManager(),
+            // contextManager: new ZoneContextManager(),
 
             // NOTE - only enable if you aren't using an OTEL collector endpoint
             // apiKey: import.meta.env.VITE_HONEYCOMB_API_KEY,
