@@ -4,6 +4,7 @@
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import * as api from "@opentelemetry/api";
+import {ZoneContextManager} from "@opentelemetry/context-zone";
 
 
 const PROPAGATION_REGEXP = import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP;
@@ -30,7 +31,7 @@ export default function installOpenTelemetry() {
             // endpoint: 'https://api-dogfood.honeycomb.io',
             localVisualizations: true,
             // contextManager: new StackContextManager(),
-            // contextManager: new ZoneContextManager(),
+            contextManager: new ZoneContextManager(),
 
             // NOTE - only enable if you aren't using an OTEL collector endpoint
             // apiKey: import.meta.env.VITE_HONEYCOMB_API_KEY,

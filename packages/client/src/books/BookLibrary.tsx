@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {Suspense, useCallback, useEffect, useState} from "react";
 import AddBookForm from "./AddBookForm";
 import BookList from "./BookList";
 import {Book} from "./types.ts";
@@ -24,12 +24,13 @@ const BookLibrary: React.FC = () => {
             case 'async-unwrapped': {
                 (async () => {
                     const books = await fetchBooksAsyncUnwrapped();
-                    setBooks(books);
-                    setStatus(`${books.length} Books loaded`);
+                    setTimeout(() => {
+                        setBooks(books);
+                        setStatus(`${books.length} Books loaded`);
+                    }, 6500);
                 })();
                 break;
             }
-                break;
             case 'async': {
                 (async () => {
                     const books = await fetchBooksAsync();
@@ -50,8 +51,6 @@ const BookLibrary: React.FC = () => {
     useEffect(() => {
         setStatus(null);
         doLoad();
-
-
     }, []);
 
     const handleAddBook = useCallback((book: Book) => {
@@ -126,7 +125,7 @@ const BookLibrary: React.FC = () => {
                     break;
                 }
                 case 'async-unwrapped': {
-                    (async() => {
+                    (() => {
                         setTimeout(async () => {
                             const data = await fetchBooksAsyncUnwrapped();
                             setBooks(data);
@@ -137,7 +136,7 @@ const BookLibrary: React.FC = () => {
                     break;
                 }
                 case 'async': {
-                    (async() => {
+                    (() => {
                         setTimeout(async () => {
                             const data = await fetchBooksAsync();
                             setBooks(data);
@@ -155,16 +154,18 @@ const BookLibrary: React.FC = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold text-center">Library Management</h1>
-            <hr className="underline"></hr>
-            { status &&
-                <p className="text-center border-2 text-black border-black mx-auto w-2/3 px-4 py-4 my-2">
-                    {status}
-                </p>
-            }
-            <AddBookForm onAddBook={handleAddBook} />
-            <BookList books={books} />
-            <button onClick={raceToLoadBooks}>Race to load books</button>
+                <h1 className="text-2xl font-bold text-center">Library Management</h1>
+                <hr className="underline"></hr>
+                { status &&
+                    <p className="text-center border-2 text-black border-black mx-auto w-2/3 px-4 py-4 my-2">
+                        {status}
+                    </p>
+                }
+                <AddBookForm onAddBook={handleAddBook} />
+                <Suspense fallback={<div>Loading...</div>}>
+                <BookList books={books} />
+                </Suspense>
+                <button onClick={raceToLoadBooks}>Race to load books</button>
         </div>
     );
 };
