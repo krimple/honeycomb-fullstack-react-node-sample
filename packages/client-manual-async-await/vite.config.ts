@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import * as dotenv from "dotenv";
+
+// import fs from "fs";
 import path from "path";
 import react from "@vitejs/plugin-react";
 
@@ -13,12 +15,7 @@ dotenv.config({
 // https://vite.dev/config/
 export default defineConfig({
   build: {
-   sourcemap: 'hidden',
-    minify: "terser", // More reliable than esbuild for source maps
-    terserOptions: {
-      keep_fnames: true, // Keeps function names intact
-      keep_classnames: true // Prevents renaming class names
-    }
+   sourcemap: 'inline',
   },
   plugins: [react()],
   server: {

@@ -22,11 +22,11 @@ COPY .env .
 
 RUN ls -l
 
-RUN corepack disable
+RUN corepack enable
 
-RUN npm install
+RUN pnpm install
 
-RUN npm run build
+RUN pnpm run build
 
 FROM nginx:stable-alpine
 
