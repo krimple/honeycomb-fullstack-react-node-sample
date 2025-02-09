@@ -1,4 +1,4 @@
-// import {client-es2015} from './flagdClient.ts';
+// import {client} from './flagdClient.ts';
 // import {ProviderEvents} from "@openfeature/web-sdk";
 
 type Features = {
@@ -13,10 +13,10 @@ export const features: Features = {
 //     return Promise.resolve();
 //     // return new Promise((resolve, reject) => {
 //     //
-//     //     client-es2015.addHandler(ProviderEvents.ConfigurationChanged, (eventDetails) => {
+//     //     client.addHandler(ProviderEvents.ConfigurationChanged, (eventDetails) => {
 //     //         console.log(`ConfigurationChanged event`);
 //     //         console.dir(eventDetails);
-//     //        const updatedCallType = client-es2015.getStringValue('asyncCallType', 'not-defined');
+//     //        const updatedCallType = client.getStringValue('asyncCallType', 'not-defined');
 //     //         if (updatedCallType !== 'async' && updatedCallType !== 'promise') {
 //     //             // TODO - this is later, how do we care???
 //     //             // TODO instrument with span error
@@ -26,7 +26,7 @@ export const features: Features = {
 //     //         }
 //     //
 //     //     //     console.log('flagd configuration changed');
-//     //     //     const updatedCallType = client-es2015.getStringValue('asyncCallType', 'not-defined');
+//     //     //     const updatedCallType = client.getStringValue('asyncCallType', 'not-defined');
 //     //     //     if (updatedCallType !== 'async' && updatedCallType !== 'promise') {
 //     //     //         reject('asyncCallType is not available in flagd')
 //     //     //     } else {
@@ -36,11 +36,11 @@ export const features: Features = {
 //     //     //     }
 //     //     });
 //     //
-//     //     client-es2015.addHandler(ProviderEvents.Ready, (eventDetails) => {
+//     //     client.addHandler(ProviderEvents.Ready, (eventDetails) => {
 //     //         console.log(`Ready event`);
 //     //         console.dir(eventDetails);
 //     //         console.log('flagd configuration changed. Go fetch it');
-//     //         const updatedCallType = client-es2015.getStringValue('asyncCallType', 'not-defined');
+//     //         const updatedCallType = client.getStringValue('asyncCallType', 'not-defined');
 //     //         if (updatedCallType !== 'async' && updatedCallType !== 'promise') {
 //     //             reject('asyncCallType is not available in flagd')
 //     //         } else {
@@ -51,7 +51,7 @@ export const features: Features = {
 //     //     });
 //     //
 //     //     // first, read the value on startup
-//     //     const updatedCallType = client-es2015.getStringValue('asyncCallType', 'not-defined');
+//     //     const updatedCallType = client.getStringValue('asyncCallType', 'not-defined');
 //     //     if (updatedCallType !== 'async' && updatedCallType !== 'promise') {
 //     //         console.log('falling back to async');
 //     //         features.asyncCallType = 'async';
