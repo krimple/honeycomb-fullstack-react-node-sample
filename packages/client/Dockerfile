@@ -1,5 +1,7 @@
 FROM node:20-alpine AS builder
 
+ARG SYMBOLS_PATH
+
 WORKDIR /app
 
 COPY src/ ./src
@@ -22,18 +24,29 @@ COPY .env .
 
 RUN ls -l
 
-RUN corepack enable
+RUN npm install
 
-RUN pnpm install
+RUN npm run build
 
-RUN pnpm run build
+# Copy symbols for symbolicator
 
-FROM nginx:stable-alpine
+RUN mkdir -p ${SYMBOLS_PATH}/assets
+
+RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/assets/
+
+FROM nginx:stable-alpine as nginx-local
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Remove the map files
+RUN rm /usr/share/nginx/html/assets/*.map
 
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
+FROM honeycombio/honeycomb-opentelemetry-collector:latest as collector-local
+
+COPY --from=builder /app/dist /symbols

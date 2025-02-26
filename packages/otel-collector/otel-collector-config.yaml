@@ -5,25 +5,27 @@ receivers:
         endpoint: 0.0.0.0:4318
         cors:
           allowed_origins:
+            - "http://0.0.0.0:5173"
             - "http://localhost:5173"
+            - "http://appserver:9999"
+            - "http://0.0.0.0:8081"
+            - "http://localhost:9999"
           allowed_headers:
-            - '*'
-
-          # allowed_headers:
-            # - 'Access-Control-Request-Headers'
-            #   - "*"
-            # - "Access-Control-Request-Headers"
-            # - "Access-Control-Request-Method"
-            # - "content-type"
-            # - "Origin"
-            # - "X-Honeycomb-Team"
-
+            - "Access-Control-Request-Headers"
+            - "Access-Control-Request-Method"
+            - "content-type"
+            - "Origin"
+            - "X-Honeycomb-Team"
 processors:
+  symbolicator:
+    source_map_store: file_store
+    local_source_maps:
+      path: /symbols
   batch:
 
 exporters:
-  # debug:
-  #  verbosity: detailed
+  debug:
+    verbosity: basic
   otlp:
     endpoint: https://api-dogfood.honeycomb.io:443
     headers:
@@ -34,8 +36,8 @@ exporters:
 
 service:
   telemetry:
-    logs:
-      level: "INFO"
+    # logs:
+      # level: "INFO"
       # development: true
       # uncomment this if consuming logs in software
       # encoding: "json"
@@ -43,6 +45,6 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp]
+      processors: [batch,symbolicator]
+      exporters: [debug, otlp]
       # exporters: [debug, otlp]
