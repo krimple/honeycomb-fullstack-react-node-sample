@@ -31,6 +31,7 @@ export function otelWrapperWithResponse<T>(fn: AsyncFunction, spanName: string =
                     resolve(response as T);
                 })
                 .catch((e: Error) => {
+                    // convert to exception span
                     span.setStatus({
                         code: SpanStatusCode.ERROR,
                         // TODO - could be more explicit, maybe JSON.stringify, etc.

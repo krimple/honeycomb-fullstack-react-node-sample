@@ -32,13 +32,15 @@ RUN npm run build
 
 RUN mkdir -p ${SYMBOLS_PATH}/assets
 
-RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/assets/
+# Note - these should live in the symbols directory directly,
+# and not use a sub-path.
+RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/
 
 FROM nginx:stable-alpine as nginx-local
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Remove the map files
+# Remove the map files from the web server (acting as production)
 RUN rm /usr/share/nginx/html/assets/*.map
 
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf

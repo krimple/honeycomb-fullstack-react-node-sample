@@ -4,7 +4,6 @@ const logger = require("./logger");
 const {addBook} = require("./routes/add-book");
 const {getBooks} = require("./routes/get-books");
 
-console.dir(express);
 const app = express();
 const PORT = Number.parseInt(process.env.PORT || "8081", 10);
 const DELAY_MAX_MS = Number.parseInt(process.env.DELAY_MAX_MS || "500", 10);
