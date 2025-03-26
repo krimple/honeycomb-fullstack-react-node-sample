@@ -14,6 +14,9 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isbn === 'blow up sir') {
+      throw new Error('blowing up sir');
+    }
     onAddBook({ isbn, name, description, publicationDate });
     setIsbn("");
     setName("");

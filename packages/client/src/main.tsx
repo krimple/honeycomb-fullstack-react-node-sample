@@ -4,7 +4,6 @@ import App from './App'
 import {StrictMode} from "react";
 
 import installOpenTelemetry from "./otel-config.ts";
-// import {bootstrapFlagD} from "./utils/feature-flags/features.ts";
 
 installOpenTelemetry();
 createRoot(document.getElementById('root')!).render(

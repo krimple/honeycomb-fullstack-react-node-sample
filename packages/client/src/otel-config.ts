@@ -2,7 +2,8 @@
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import * as api from "@opentelemetry/api";
-console.log('*******************************');
+// import { SessionIdToBaggageProcessor } from './utils/otel/baggage-span-processor.ts';
+// console.log('*******************************');
 const PROPAGATION_REGEXP = import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP;
 console.log('PROPAGATION_REGEXP', PROPAGATION_REGEXP);
 
@@ -59,6 +60,7 @@ export default function installOpenTelemetry() {
                     }
                 }),
             ],
+            // spanProcessor: new SessionIdToBaggageProcessor()
         });
         sdk.start();
 

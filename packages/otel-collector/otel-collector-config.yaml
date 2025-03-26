@@ -17,10 +17,10 @@ receivers:
             - "Origin"
             - "X-Honeycomb-Team"
 processors:
-  symbolicator:
-    source_map_store: file_store
-    local_source_maps:
-      path: /symbols
+#  symbolicator:
+#    source_map_store: file_store
+#    local_source_maps:
+#      path: /symbols
   batch:
 
 exporters:
@@ -45,6 +45,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch,symbolicator]
+      processors: [batch]
+      # processors: [batch,symbolicator]
       exporters: [debug, otlp]
       # exporters: [debug, otlp]

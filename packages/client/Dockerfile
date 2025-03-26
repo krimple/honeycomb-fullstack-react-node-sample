@@ -30,7 +30,7 @@ RUN npm run build
 
 # Copy symbols for symbolicator
 
-RUN mkdir -p ${SYMBOLS_PATH}/assets
+RUN mkdir -p ${SYMBOLS_PATH}/assets/
 
 RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/assets/
 
@@ -49,4 +49,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 FROM honeycombio/honeycomb-opentelemetry-collector:latest as collector-local
 
-COPY --from=builder /app/dist /symbols
+# Not working atm
+# COPY --from=builder /symbols/assets/*.* /symbols/
+# COPY --from=builder /app/node_modules/react/cjs/*.js /symbols/
+# COPY --from=builder /app/node_modules/react-dom/cjs/*.js /symbols/

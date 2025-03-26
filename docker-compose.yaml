@@ -1,24 +1,27 @@
 services:
-  nginx-react:
-    container_name: react-app
-    build:
-      context: packages/client
-      dockerfile: Dockerfile
-      args:
-        - SYMBOLS_PATH=/symbols
-      target: nginx-local
-    ports:
-      - "5173:80"
-    environment:
-      NODE_ENV: production
-
-  appserver:
-    container_name: express_server
-    build:
-      context: packages/server
-      dockerfile: Dockerfile
-    ports:
-      - "9999:8081"
+#  nginx-react:
+#    container_name: react-app
+#    build:
+#      context: packages/client
+#      dockerfile: Dockerfile
+#      args:
+#        - SYMBOLS_PATH=/symbols
+#      target: nginx-local
+#    ports:
+#      - "5173:80"
+#    environment:
+#      NODE_ENV: production
+#
+#  appserver:
+#    container_name: express_server
+#    build:
+#      context: packages/server
+#      dockerfile: Dockerfile
+#    ports:
+#      - "9999:8081"
+#    environment:
+#      OTEL_EXPORTER_OTLP_ENDPOINT: otel-collector:4318
+#      OTEL_SERVICE_NAME: express-backend
 
   otel-collector:
     # image: otel/opentelemetry-collector-contrib:0.114.0
@@ -37,39 +40,38 @@ services:
       - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP http receiver
 
-  postgres:
-    image: postgres:15.4
-    container_name: postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: library_user
-      POSTGRES_PASSWORD: library_password
-      POSTGRES_DB: library
-    ports:
-      - '5432:5432'
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+#  postgres:
+#    image: postgres:15.4
+#    container_name: postgres
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_USER: library_user
+#      POSTGRES_PASSWORD: library_password
+#      POSTGRES_DB: library
+#    ports:
+#      - '5432:5432'
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
 
-  flyway:
-    image: flyway/flyway:latest
-    depends_on:
-      - postgres
-    command: -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql migrate
-    volumes:
-      - ./flyway.conf:/flyway/conf/flyway.conf:ro
-      - ./db/migrations:/flyway/sql
-
-# todo - get this working
-  flagd:
-    image: ghcr.io/open-feature/flagd:latest
-    container_name: flagd
-    ports:
-      - "8013:8013" # Expose the flagd server
-    volumes:
-      - ./flagd/flagd.json:/etc/flagd/flagd.json:ro
-    command: ["start",  "--uri=file:///etc/flagd/flagd.json"]
-
+#  flyway:
+#    image: flyway/flyway:latest
+#    depends_on:
+#      - postgres
+#    command: -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql migrate
+#    volumes:
+#      - ./flyway.conf:/flyway/conf/flyway.conf:ro
+#      - ./db/migrations:/flyway/sql
+#
+## todo - get this working
+#  flagd:
+#    image: ghcr.io/open-feature/flagd:latest
+#    container_name: flagd
+#    ports:
+#      - "8013:8013" # Expose the flagd server
+#    volumes:
+#      - ./flagd/flagd.json:/etc/flagd/flagd.json:ro
+#    command: ["start",  "--uri=file:///etc/flagd/flagd.json"]
+#
 volumes:
-  postgres_data:
+#  postgres_data:
   symbols_data:
-    
