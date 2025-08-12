@@ -16,36 +16,26 @@ receivers:
             - "content-type"
             - "Origin"
             - "X-Honeycomb-Team"
+
 processors:
-#  symbolicator:
-#    source_map_store: file_store
-#    local_source_maps:
-#      path: /symbols
   batch:
+  # symbolicator:
+  #   source_map_store: file_store
+  #   local_source_maps:
+  #     path: /symbols
+  # batch:
 
 exporters:
   debug:
     verbosity: basic
   otlp:
-    endpoint: https://api-dogfood.honeycomb.io:443
+    endpoint: https://api.honeycomb.io:443
     headers:
-      # If testing start by using the key inline, to eliminate environment issues
-      # "x-honeycomb-team": "< your key here >"
-      # In this case, pull from env.
       "x-honeycomb-team": "${HONEYCOMB_API_KEY}"
 
 service:
-  telemetry:
-    # logs:
-      # level: "INFO"
-      # development: true
-      # uncomment this if consuming logs in software
-      # encoding: "json"
-
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      # processors: [batch,symbolicator]
       exporters: [debug, otlp]
-      # exporters: [debug, otlp]

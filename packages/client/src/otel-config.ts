@@ -1,20 +1,13 @@
-// import { StackContextManager } from '@opentelemetry/sdk-trace-web';
 import { HoneycombWebSDK } from '@honeycombio/opentelemetry-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import * as api from "@opentelemetry/api";
-// import { SessionIdToBaggageProcessor } from './utils/otel/baggage-span-processor.ts';
-// console.log('*******************************');
-const PROPAGATION_REGEXP = import.meta.env.VITE_OTEL_APPSERVER_PROPAGATION_REGEXP;
-console.log('PROPAGATION_REGEXP', PROPAGATION_REGEXP);
+import { v4 } from 'uuid';
+import { ZoneContextManager } from '@opentelemetry/context-zone';
 
 const configDefaults = {
     ignoreNetworkEvents: true,
-    propagateTraceHeaderCorsUrls: [
-        // Example value in .env:  ".*"
-        new RegExp(PROPAGATION_REGEXP),
-        // Example inline literal regexp:
-        // /.*/g
-    ]
+    // this regexp means add to all outgoing fetch/XMLHttpRequest calls
+    propagateTraceHeaderCorsUrls: [/.*/g]
 }
 
 export default function installOpenTelemetry() {
@@ -23,13 +16,28 @@ export default function installOpenTelemetry() {
         const sdk = new HoneycombWebSDK({
             // turn on to get additional tracing info in console log
             debug: true, // Set to false for production environment.
+            contextManager: new ZoneContextManager(),
+            // new in 0.15.0 - control the session.id generation process
+            sessionProvider: {
+                // Our example stores sessionId in a sessionStorage key, so different
+                // tabs can have different sessions and timelines of interactions
+                getSessionId: function (): string | null {
+                    let sessionId = sessionStorage.getItem('sessionId');
+                    if (!sessionId) {
+
+                        // create and store
+                        sessionId = v4()
+                        sessionStorage.setItem('sessionId', sessionId);
+                    }
+                    return sessionId;
+                }
+            },
 
             endpoint: import.meta.env.VITE_OTEL_EXPORTER_OTLP_ENDPOINT,
-            // endpoint: 'https://api-dogfood.honeycomb.io',
+            // to help debug
             localVisualizations: true,
-            // contextManager: new StackContextManager(),
 
-            // NOTE - only enable if you aren't using an OTEL collector endpoint
+            // NOTE - only enable the Honeycomb API key if you aren't using an OTel collector endpoint
             // apiKey: import.meta.env.VITE_HONEYCOMB_API_KEY,
 
             // NOTE - turning this on - I am pointing to the non-default HC endpoint
@@ -46,7 +54,6 @@ export default function installOpenTelemetry() {
                         applyCustomAttributesOnSpan: (span: api.Span, request: Request | RequestInit) => {
                             const headers = request instanceof Request ? request.headers : new Headers(request?.headers);
                             headers?.forEach((value, key) => {
-                                console.log(key, value);
                                 if (key === 'Content-Type') {
                                     span.setAttribute('app.content.type', value);
                                 }
@@ -60,11 +67,8 @@ export default function installOpenTelemetry() {
                     }
                 }),
             ],
-            // spanProcessor: new SessionIdToBaggageProcessor()
         });
         sdk.start();
-
-        // console.dir(sdk);
 
         // @ts-expect-error blah blah ginger see Gary Larson
         sdk['_tracerProvider']['_registeredSpanProcessors'].forEach(item => {

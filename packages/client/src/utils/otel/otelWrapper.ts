@@ -52,3 +52,22 @@ export function otelWrapper(fn: AsyncFunction, spanName: string = 'otelWrapper')
             });
         });
 }
+
+export async function withSpan<T>(name: string, fn: () => Promise<T> | T): Promise<T> {
+    const span = tracer.startSpan(name);
+    try {
+        const result = await fn(); // Await in case fn() returns a Promise
+        return result;
+    } catch (e: unknown) {
+        if (e instanceof Error) {
+            span.recordException(e);
+            span.setStatus({
+                code: SpanStatusCode.ERROR,
+                message: "call failed"
+            });
+        }
+        throw e; // Re-throw to propagate the error
+    } finally {
+        span.end();
+    }
+}

@@ -12,7 +12,7 @@ COPY *.json .
 
 COPY *.sh .
 
-COPY .env .
+COPY .env.docker ./.env
 
 RUN ls -l
 
