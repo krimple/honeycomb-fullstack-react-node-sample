@@ -7,7 +7,12 @@ import { ZoneContextManager } from '@opentelemetry/context-zone';
 const configDefaults = {
     ignoreNetworkEvents: true,
     // this regexp means add to all outgoing fetch/XMLHttpRequest calls
-    propagateTraceHeaderCorsUrls: [/.*/g]
+    propagateTraceHeaderCorsUrls: [
+        // this regexp means add to all outgoing fetch/XMLHttpRequest calls
+        /.*/g,
+        // this regexp allows APIs to a specific host - note the escape characters before the forward slashes
+        /http:\/\/localhost:8081/
+    ]
 }
 
 export default function installOpenTelemetry() {
