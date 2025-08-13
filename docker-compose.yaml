@@ -9,6 +9,8 @@ services:
       target: nginx-local
     ports:
       - "5173:80"
+#    volumes:
+#      - symbols_data:/symbols
     environment:
       NODE_ENV: production
 
@@ -18,7 +20,13 @@ services:
       context: packages/server
       dockerfile: Dockerfile
     ports:
-      - "9999:8081"
+      - "8081:8081"
+    env_file:
+      - ./.env
+      - ./packages/server/.env.docker
+    #environment:
+      # OTEL_EXPORTER_OTLP_ENDPOINT: otel-collector:4318
+      # OTEL_SERVICE_NAME: express-backend
 
   otel-collector:
     # image: otel/opentelemetry-collector-contrib:0.114.0
@@ -31,8 +39,11 @@ services:
       target: collector-local
     volumes:
       - ./packages/otel-collector/otel-collector-config.yaml:/config.yaml
+#      - symbols_data:/symbols
     environment:
       HONEYCOMB_API_KEY: $HONEYCOMB_API_KEY
+    env_file:
+      - .env
     ports:
       - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP http receiver
@@ -56,20 +67,19 @@ services:
       - postgres
     command: -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql migrate
     volumes:
-      - ./flyway.conf:/flyway/conf/flyway.conf:ro
-      - ./db/migrations:/flyway/sql
+     - ./flyway.conf:/flyway/conf/flyway.conf:ro
+     - ./db/migrations:/flyway/sql
 
-# todo - get this working
-  flagd:
-    image: ghcr.io/open-feature/flagd:latest
-    container_name: flagd
-    ports:
-      - "8013:8013" # Expose the flagd server
-    volumes:
-      - ./flagd/flagd.json:/etc/flagd/flagd.json:ro
-    command: ["start",  "--uri=file:///etc/flagd/flagd.json"]
+## todo - get this working
+#  flagd:
+#    image: ghcr.io/open-feature/flagd:latest
+#    container_name: flagd
+#    ports:
+#      - "8013:8013" # Expose the flagd server
+#    volumes:
+#      - ./flagd/flagd.json:/etc/flagd/flagd.json:ro
+#    command: ["start",  "--uri=file:///etc/flagd/flagd.json"]
 
 volumes:
   postgres_data:
   symbols_data:
-    

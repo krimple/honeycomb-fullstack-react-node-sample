@@ -32,15 +32,14 @@ RUN npm run build
 
 RUN mkdir -p ${SYMBOLS_PATH}/assets
 
-# Note - these should live in the symbols directory directly,
-# and not use a sub-path.
-RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/
+RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/assets/
+RUN echo "directory contents: " && ls -R ${SYMBOLS_PATH}/assets/
 
 FROM nginx:stable-alpine as nginx-local
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Remove the map files from the web server (acting as production)
+# Remove the map files
 RUN rm /usr/share/nginx/html/assets/*.map
 
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
@@ -50,5 +49,4 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 FROM honeycombio/honeycomb-opentelemetry-collector:latest as collector-local
-
-COPY --from=builder /app/dist /symbols
+COPY --from=builder ${SYMBOLS_PATH} /symbols/

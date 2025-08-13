@@ -1,8 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const logger = require("./logger");
-const {addBook} = require("./routes/add-book");
-const {getBooks} = require("./routes/get-books");
+const router = require("./routes");
 
 const app = express();
 const PORT = Number.parseInt(process.env.PORT || "8081", 10);
@@ -35,26 +34,17 @@ app.use('/api/*path', cors(corsOptions));
 
 app.use(express.json());
 
-// not realy needed as auto-instrumentation wires up the request logging
-app.use((req, res, next) => {
-    logger.info({protocol: req.protocol, method: req.method, path: req.path});
-    next();
-});
-
 // this should slow down any response
 app.use(slowdownMiddleware);
 
-// Add a book
-app.post('/api/books', addBook);
+// add API router
+app.use('/api', router);
 
-// Get list of all books
-app.get('/api/books', getBooks);
-
-// Centralized error handler
-// app.use((err, req, res, next) => {
-//     console.error(err); // Log error
-//     res.status(err.status || 500).json({ message: 'Internal Server Error', error: err.message });
-// });
+// Centralized error handler?
+app.use((err, req, res, next) => {
+    console.error(err); // Log error
+    res.status(err.status || 500).json({ message: 'Internal Server Error', error: err.message });
+});
 
 const startServer = () => {
     app.listen(PORT, () => {
