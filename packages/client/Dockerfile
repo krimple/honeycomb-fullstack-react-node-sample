@@ -20,7 +20,7 @@ COPY *.ts .
 
 COPY *.json .
 
-COPY .env .
+COPY .env.docker ./.env
 
 RUN ls -l
 
@@ -30,9 +30,10 @@ RUN npm run build
 
 # Copy symbols for symbolicator
 
-RUN mkdir -p ${SYMBOLS_PATH}/assets
+RUN mkdir -p ${SYMBOLS_PATH}/assets/
 
 RUN cp -r dist/assets/*.* ${SYMBOLS_PATH}/assets/
+RUN echo "directory contents: " && ls -R ${SYMBOLS_PATH}/assets/
 
 FROM nginx:stable-alpine as nginx-local
 
@@ -48,5 +49,4 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 FROM honeycombio/honeycomb-opentelemetry-collector:latest as collector-local
-
-COPY --from=builder /app/dist /symbols
+COPY --from=builder ${SYMBOLS_PATH} /symbols/

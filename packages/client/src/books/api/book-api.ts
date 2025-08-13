@@ -1,6 +1,5 @@
 import {Book} from "../types.ts";
-import {otelWrapperWithResponse} from "../../utils/otel/otelWrapperWithResponse.ts";
-import {otelWrapper} from "../../utils/otel/otelWrapper.ts";
+import {withSpan} from "../../utils/otel/otelWrapper.ts";
 import {SpanStatusCode, trace} from "@opentelemetry/api";
 
 const resourceEndpoint = `${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`;
@@ -28,14 +27,14 @@ export const fetchBooks = (): Promise<Book[]> => {
  * the span status/embedding the exception. This wrapper uses a generic type for the data
  * returned.
  */
-async function fetchBooksAsync() : Promise<Book[]> {
-    return otelWrapperWithResponse<Book[]>(async () => {
+export async function fetchBooksAsync() : Promise<Book[]> {
+    return withSpan<Book[]>("fetchBooks", async () => {
         const result = await fetch(resourceEndpoint);
         if (!result.ok) {
             throw new Error(result.statusText);
         }
         return await result.json() as Book[];
-    }, 'fetchBooks');
+    });
 }
 /**
  * Note: in a promise auto-wrapped fetch, the error is reported by the instrumentation
@@ -112,6 +111,17 @@ function addBookPromises(book: Book) {
                 console.dir(result);
                 throw new Error(result.statusText || 'unknown error');
             }
+        })
+        // TODO VET THIS?
+        .catch(error => {
+            const span =  trace.getActiveSpan();
+            span?.recordException(error);
+            span?.setStatus({
+                code: SpanStatusCode.ERROR,
+                message: 'message' in error ? error.getMessage() : 'unknown error'
+            });
+            console.error(error);
+            throw error;
         });
 
 }
@@ -121,8 +131,8 @@ function addBookPromises(book: Book) {
  * the `otelWrapper` helper function here, which creates a span and sets the status based on pass/fail.
  * @param book
  */
-async function addBookAsync(book: Book) {
-    return otelWrapper(async () => {
+export async function addBookAsync(book: Book) {
+    return withSpan('addBook', async () => {
         try {
             const result = await fetch(`${import.meta.env.VITE_PUBLIC_APP_SERVER_URL}/api/books`, {
                 method: 'POST',
@@ -141,5 +151,5 @@ async function addBookAsync(book: Book) {
             console.log(e);
             throw e;
         }
-    }, 'addBook');
+    });
 }
